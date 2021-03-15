@@ -2,44 +2,57 @@
 # -*- coding: utf-8 -*-
 
 import socket
-from sys import argv
+from argparse import ArgumentParser
 
-
-def brute_force(domain=None, file=None):
+def read_word_list(file_path=None):
     """
-    Realiza a enumeração do DSN.
+    Resolve uma world list com os hosts.
 
-    Params:
-        domain: <str> :Nome do dominío a ser enumerado. E.g. google.com
-        file: <str> :Nome(caminho) do arquivo com os prefixos de DSN
+    Param:
+        file_path: <str> :Caminho até o arquivo de world list.
+    Return:
+        word_list: <list> :Retorna uma lista dos hosts.
     """
     word_list = None
-    if not file:
-        with open('.word_list.txt') as reader:
-            word_list = [line.strip('\n') for line in reader.readlines()]
-    else:
-        with open('%s' % file) as reader:
-            word_list = [line.strip('\n') for line in reader.readlines()]
+    with open(file_path) as reader:
+        word_list = [line.strip('\n') for line in reader.readlines()]
+    return word_list
 
-    for prefix in word_list:
+
+def enumerate_domain(domain=None, word_list=None):
+    """
+    Realiza a enumeração do dominio desejado.
+
+    Params:
+        domain: <str> :Nome do dominio. Ex: google.com
+        word_list: <list> :Lista de hots: Ex: [www, ftp]
+    """
+    for name in word_list:
         try:
-            dns = '%s.%s' % (prefix, domain)
+            dns = '%s.%s' % (name, domain)
             internet_protocol = socket.gethostbyname(dns)
             print('%s \t | %s' % (dns, internet_protocol))
         except socket.gaierror:
             pass
 
+
 if __name__ == '__main__':
-    domain = None
-    word_list = None
-    try:
-        domain = argv[1]
-    except IndexError:
-        print('Nome de domínio é obrigatório!')
+    dns_enum = ArgumentParser(
+        description='Enumera dominios.',
+    )
+    dns_enum.add_argument(
+        'domain',
+        type=str,
+        help='Nome de dominio. Ex: google.com',
+    )
+    dns_enum.add_argument(
+        '--word_list',
+        '-l',
+        action='store',
+        default='.word_list.txt',
+    )
+    dns_enum.version = '0.0.1'
 
-    try:
-        word_list = argv[2]
-    except IndexError:
-        pass
-
-    brute_force(domain, word_list)
+    args = dns_enum.parse_args()
+    word_list = read_word_list(args.word_list)
+    enumerate_domain(args.domain, word_list)
