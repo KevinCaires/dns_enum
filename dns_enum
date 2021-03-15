@@ -47,9 +47,10 @@ if __name__ == '__main__':
     )
     dns_enum.add_argument(
         '--word_list',
-        '-l',
+        '-wl',
         action='store',
         default='.word_list.txt',
+        help='word_list de hosts.',
     )
     dns_enum.version = '0.0.1'
 
