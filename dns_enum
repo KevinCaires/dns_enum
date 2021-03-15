@@ -1,0 +1,45 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
+import socket
+from sys import argv
+
+
+def brute_force(domain=None, file=None):
+    """
+    Realiza a enumeração do DSN.
+
+    Params:
+        domain: <str> :Nome do dominío a ser enumerado. E.g. google.com
+        file: <str> :Nome(caminho) do arquivo com os prefixos de DSN
+    """
+    word_list = None
+    if not file:
+        with open('.word_list.txt') as reader:
+            word_list = [line.strip('\n') for line in reader.readlines()]
+    else:
+        with open('%s' % file) as reader:
+            word_list = [line.strip('\n') for line in reader.readlines()]
+
+    for prefix in word_list:
+        try:
+            dns = '%s.%s' % (prefix, domain)
+            internet_protocol = socket.gethostbyname(dns)
+            print('%s \t | %s' % (dns, internet_protocol))
+        except socket.gaierror:
+            pass
+
+if __name__ == '__main__':
+    domain = None
+    word_list = None
+    try:
+        domain = argv[1]
+    except IndexError:
+        print('Nome de domínio é obrigatório!')
+
+    try:
+        word_list = argv[2]
+    except IndexError:
+        pass
+
+    brute_force(domain, word_list)
