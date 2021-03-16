@@ -52,7 +52,6 @@ if __name__ == '__main__':
         default='.word_list.txt',
         help='word_list de protocolos de rede.',
     )
-    dns_enum.version = '0.0.1'
 
     args = dns_enum.parse_args()
     word_list = read_word_list(args.word_list)
