@@ -15,4 +15,4 @@ Exemplo de uso 1:
 
 Exemplo de uso 2:
 
-    ./dns_enum google.com --/home/jon/my_word_list.txt
+    ./dns_enum google.com --word_list /home/jon/my_word_list.txt
