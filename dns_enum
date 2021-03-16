@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
+import os
 import socket
 from argparse import ArgumentParser
 
@@ -37,6 +38,7 @@ def enumerate_domain(domain=None, word_list=None):
 
 
 if __name__ == '__main__':
+    local_dir = os.path.dirname(os.path.abspath(__file__))
     dns_enum = ArgumentParser(
         description='Enumera dominios.',
     )
@@ -49,7 +51,7 @@ if __name__ == '__main__':
         '--word_list',
         '-wl',
         action='store',
-        default='.word_list.txt',
+        default='%s/.word_list.txt' % local_dir,
         help='word_list de protocolos de rede.',
     )
 
