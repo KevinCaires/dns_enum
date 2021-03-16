@@ -91,7 +91,7 @@ def read_word_list(file_path=None):
             'ibmdb','id','ida','idaho','ids','ie','iis','il','illinois','im','images','imail','imap','imap4',\
             'img','img0','img01','img02','in','inbound','inc','include','incoming','india','indiana',\
             'indianapolis','info','informix','inside','install','int','intern','internal','international',\
-            'internet','intl','intranet','invalid','investor','investors','io','iota','iowa','iplanet',\
+            'internet','intl','intranet','invalid','investor','investors','io', 'iot', 'iota','iowa','iplanet',\
             'ipmonitor','ipsec','ipsec-gw','ipv6','ipv6.teredo','iq','ir','irc','ircd','ircserver','ireland',\
             'iris','irvine','irving','is','isa','isaserv','isaserver','ism','israel','isync','it','italy','ix',\
             'j','japan','java','je','jedi','jm','jo','jobs','john','jp','jrun','juegos','juliet','juliette',\
