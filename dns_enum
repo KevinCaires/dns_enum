@@ -11,7 +11,7 @@ def read_word_list(file_path=None):
     Param:
         file_path: <str> :Caminho até o arquivo de world list.
     Return:
-        word_list: <list> :Retorna uma lista dos hosts.
+        word_list: <list> :Retorna uma lista dos protocolos de rede.
     """
     word_list = None
     with open(file_path) as reader:
@@ -50,7 +50,7 @@ if __name__ == '__main__':
         '-wl',
         action='store',
         default='.word_list.txt',
-        help='word_list de hosts.',
+        help='word_list de protocolos de rede.',
     )
     dns_enum.version = '0.0.1'
 
