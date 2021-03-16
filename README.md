@@ -1,5 +1,17 @@
 # DNS ENUM
 
+## Instalação
+
+É necessário ter o python2 instalado.
+
+Depois de clonar o repositório basta entrar na pasta e instalar com o setup.
+
+    python2 setup.py install
+
+    ou
+    
+    ./setup.py install
+
 ## Comandos
 
  Argumento | Alias | Descrição 
