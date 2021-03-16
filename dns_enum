@@ -206,8 +206,6 @@ def enumerate_domain(domain=None, word_list=None):
 
 
 if __name__ == '__main__':
-    local_dir = os.path.dirname(os.path.abspath(__file__))
-    print(local_dir)
     dns_enum = ArgumentParser(
         description='Enumera dominios.',
     )
