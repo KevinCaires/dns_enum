@@ -16,7 +16,7 @@ Depois de clonar o repositório basta entrar na pasta e instalar com o setup.
 
  Argumento | Alias | Descrição 
 -----------|-------|------------
- domain    |   X   | Argumento posicional obrigatório contendo o nome do dominio. Ex: `google.com`.
+ domain    | | Argumento posicional obrigatório contendo o nome do dominio. Ex: `google.com`.
  --word_list | -wl | Argumento opcional, correspondente com o caminho + nome de uma lista de protocolos de rede. Ex: `www, ftp, ns1, ...`.
 
 _________________
