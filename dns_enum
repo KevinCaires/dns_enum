@@ -1,26 +1,13 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-import os
 import socket
 from argparse import ArgumentParser
 
-def read_word_list(file_path=None):
-    """
-    Resolve uma world list com os hosts.
 
-    Param:
-        file_path: <str> :Caminho até o arquivo de world list.
-    Return:
-        word_list: <list> :Retorna uma lista dos protocolos de rede.
-    """
-    word_list = None
-    if file_path:    
-        with open(file_path) as reader:
-            word_list = [line.strip('\n') for line in reader.readlines()]
-        return word_list
-    # Retorno padrão.
-    return ['0','01','02','03','1','10','11','12','13','14','15','16','17','18','19','2','20','3',\
+class DnsEnum:
+    # Protocolos de rede padrão da aplicação.
+    network_protocol = ['0','01','02','03','1','10','11','12','13','14','15','16','17','18','19','2','20','3',\
             '3com','4','5','6','7','8','9','ILMI','a','a.auth-ns','a01','a02','a1','a2','abc','about',\
             'ac','academico','acceso','access','accounting','accounts','acid','activestat','ad','adam',\
             'adkit','admin','administracion','administrador','administrator','administrators','admins',\
@@ -188,22 +175,34 @@ def read_word_list(file_path=None):
             'x-ray','xi','xlogan','xmail','xml','xp','y','yankee','ye','yellow','young','yt','yu','z',\
             'z-log','za','zebra','zera','zeus','zlog','zm','zulu','zw']
 
+    def __init__(self, domain):
+        """
+        domain: <str> :Domnínio alvo da consulta.
+        """
+        self.domain = domain
 
-def enumerate_domain(domain=None, word_list=None):
-    """
-    Realiza a enumeração do dominio desejado.
+    def word_list(self, file=None):
+        """
+        Retorna uma lista de protocolos de rede.
+        file: <str> :Nome e caminho do arquivo de wordlist do usuário, se houver.
+        """
+        if not file:
+            return self.network_protocol
+        with open(file, 'r') as reader:
+            return [line.strip('\n') for line in reader.readlines()]
 
-    Params:
-        domain: <str> :Nome do dominio. Ex: google.com
-        word_list: <list> :Lista de hots: Ex: [www, ftp]
-    """
-    for name in word_list:
-        try:
-            dns = '%s.%s' % (name, domain)
-            internet_protocol = socket.gethostbyname(dns)
-            print('%s \t | %s' % (dns, internet_protocol))
-        except socket.gaierror:
-            pass
+    def enumerate(self, word_list):
+        """
+        Printa na tela os domínios encontrados.
+        word_list: <str> :Lista de protocolos de rede.
+        """
+        for name in word_list:
+            try:
+                dns = '%s.%s' % (name, self.domain)
+                internet_protocol = socket.gethostbyname(dns)
+                print('%s \t | %s' % (dns, internet_protocol))
+            except socket.gaierror:
+                pass
 
 
 if __name__ == '__main__':
@@ -224,10 +223,11 @@ if __name__ == '__main__':
     )
 
     args = dns_enum.parse_args()
+    enum = DnsEnum(args.domain)
 
     if args.word_list:
-        word_list = read_word_list(args.word_list)
+        word_list = enum.word_list(args.word_list)
     else:
-        word_list = read_word_list()
+        word_list = enum.word_list()
 
-    enumerate_domain(args.domain, word_list)
+    enum.enumerate(word_list)
