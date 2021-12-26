@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import socket
+from threading import Thread
 from argparse import ArgumentParser
 
 
@@ -230,4 +231,15 @@ if __name__ == '__main__':
     else:
         word_list = enum.word_list()
 
-    enum.enumerate(word_list)
+    jobs = []
+    for i in range(5):
+        proc = Thread(
+            target=enum.enumerate(word_list)
+        )
+        jobs.append(proc)
+
+    for job in jobs:
+        job.start()
+
+    for job in jobs:
+        job.join()
