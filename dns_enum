@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import socket
@@ -176,13 +176,13 @@ class DnsEnum:
             'x-ray','xi','xlogan','xmail','xml','xp','y','yankee','ye','yellow','young','yt','yu','z',\
             'z-log','za','zebra','zera','zeus','zlog','zm','zulu','zw']
 
-    def __init__(self, domain):
+    def __init__(self, domain: str) -> None:
         """
         domain: <str> :Domnínio alvo da consulta.
         """
         self.domain = domain
 
-    def word_list(self, file=None):
+    def word_list(self, file: str=None) -> list:
         """
         Retorna uma lista de protocolos de rede.
         file: <str> :Nome e caminho do arquivo de wordlist do usuário, se houver.
@@ -192,7 +192,7 @@ class DnsEnum:
         with open(file, 'r') as reader:
             return [line.strip('\n') for line in reader.readlines()]
 
-    def enumerate(self, word_list):
+    def enumerate(self, word_list: list) -> None:
         """
         Printa na tela os domínios encontrados.
         word_list: <str> :Lista de protocolos de rede.
@@ -219,8 +219,16 @@ if __name__ == '__main__':
         '--word_list',
         '-wl',
         action='store',
-        # default='%s/.word_list.txt' % local_dir,
         help='word_list de protocolos de rede.',
+        type=str,
+    )
+    dns_enum.add_argument(
+        '--threads_number',
+        '-tn',
+        action='store',
+        help='Número de processos a serem executados.',
+        type=int,
+        default=1,
     )
 
     args = dns_enum.parse_args()
@@ -231,10 +239,19 @@ if __name__ == '__main__':
     else:
         word_list = enum.word_list()
 
+    size = int((len(word_list)/args.threads_number))
+
+    head, tail = word_list[:size], word_list[size:]
+
+    to_process = []
+    while head:
+        to_process.append(head)
+        head, tail = tail[:size],  tail[size:] 
+
     jobs = []
-    for i in range(5):
+    for content in to_process:
         proc = Thread(
-            target=enum.enumerate(word_list)
+            target=enum.enumerate(content),
         )
         jobs.append(proc)
 
