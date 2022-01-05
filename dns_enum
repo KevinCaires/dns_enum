@@ -239,21 +239,13 @@ if __name__ == '__main__':
     else:
         word_list = enum.word_list()
 
-    size = int((len(word_list)/args.threads_number))
-
-    head, tail = word_list[:size], word_list[size:]
-
-    to_process = []
-    while head:
-        to_process.append(head)
-        head, tail = tail[:size],  tail[size:] 
-
     jobs = []
-    for content in to_process:
-        proc = Thread(
-            target=enum.enumerate(content),
+    for i in range(args.threads_number):
+        jobs.append(
+            Thread(
+                target=enum.enumerate(word_list)
+            )
         )
-        jobs.append(proc)
 
     for job in jobs:
         job.start()
