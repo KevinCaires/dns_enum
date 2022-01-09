@@ -19,6 +19,7 @@ Depois de clonar o repositório basta entrar na pasta e instalar com o setup.
  domain    | | Argumento posicional obrigatório contendo o nome do dominio. Ex: `google.com`.
  --word_list | -wl | Argumento opcional, correspondente com o caminho + nome de uma lista de protocolos de rede. Ex: `www, ftp, ns1, ...`.
  --threads_nuber | -tn | Quantidade de threads que devem ser executadas na busca.
+ --processes_number | -pn | Quantidade de processos que devem ser executados na busca. Essa opção usa multiprocessing, recomendo que se usar essa opção seja passado no argumento, no máximo, a mesma quantidade de núcleos do seu processador, visando não travar seu sistema.
 
 _________________
 
