@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import socket
-from threading import Thread
 from argparse import ArgumentParser
+from multiprocessing import Process
+from threading import Thread
 
 
 class DnsEnum:
@@ -205,6 +206,50 @@ class DnsEnum:
             except socket.gaierror:
                 pass
 
+    def thread_run(self, threads_number: int, word_list: list) -> None:
+        """
+        Roda o sistema com threads.
+        """
+        jobs = []
+        for i in range(threads_number):
+            jobs.append(
+                Thread(
+                    target=self.enumerate(word_list)
+                )
+            )
+
+        for job in jobs:
+            job.start()
+
+        for job in jobs:
+            job.join()
+
+    def process_run(self, processes_number: int, word_list: list) -> None:
+        """
+        Roda o sistema com multi-processos.
+        """
+        size = int(len(word_list) / processes_number)
+        head, tail = word_list[:size], word_list[size:]
+        to_process = []
+        jobs = []
+
+        while head:
+            to_process.append(head)
+            head, tail = tail[:size], tail[size:]
+
+        for item in to_process:
+            proc = Process(
+                target=self.enumerate,
+                args=(item, )
+            )
+            jobs.append(proc)
+
+        for job in jobs:
+            job.start()
+
+        for job in jobs:
+            job.join()
+
 
 if __name__ == '__main__':
     dns_enum = ArgumentParser(
@@ -226,9 +271,17 @@ if __name__ == '__main__':
         '--threads_number',
         '-tn',
         action='store',
-        help='Número de processos a serem executados.',
+        help='Número de threads a serem executadas.',
         type=int,
-        default=1,
+        default=0,
+    )
+    dns_enum.add_argument(
+        '--processes_number',
+        '-pn',
+        action='store',
+        help='Número de processos a sererm executados.',
+        type=int,
+        default=0,
     )
 
     args = dns_enum.parse_args()
@@ -239,16 +292,15 @@ if __name__ == '__main__':
     else:
         word_list = enum.word_list()
 
-    jobs = []
-    for i in range(args.threads_number):
-        jobs.append(
-            Thread(
-                target=enum.enumerate(word_list)
-            )
-        )
+    if args.threads_number and args.processes_number:
+        print('Parâmetros inválidos.')
+        exit(1)
 
-    for job in jobs:
-        job.start()
+    elif args.threads_number:
+        enum.thread_run(args.threads_number, word_list)
 
-    for job in jobs:
-        job.join()
+    elif args.processes_number:
+        enum.process_run(args.processes_number, word_list)
+
+    else:
+        enum.enumerate(word_list)        
